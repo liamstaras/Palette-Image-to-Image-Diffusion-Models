@@ -10,7 +10,7 @@ import torch.nn as nn
 
 class GroupNorm32(nn.GroupNorm):
     def forward(self, x):
-        return super().forward(x.float()).type(x.dtype)
+        return super().forward(x.to(torch.get_default_dtype())).type(x.dtype)
 
 
 def zero_module(module):
@@ -131,7 +131,7 @@ def gamma_embedding(gammas, dim, max_period=10000):
     freqs = torch.exp(
         -math.log(max_period) * torch.arange(start=0, end=half, dtype=torch.float32) / half
     ).to(device=gammas.device)
-    args = gammas[:, None].float() * freqs[None]
+    args = gammas[:, None].to(torch.get_default_dtype()) * freqs[None]
     embedding = torch.cat([torch.cos(args), torch.sin(args)], dim=-1)
     if dim % 2:
         embedding = torch.cat([embedding, torch.zeros_like(embedding[:, :1])], dim=-1)

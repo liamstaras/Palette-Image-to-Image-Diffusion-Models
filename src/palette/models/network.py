@@ -13,6 +13,7 @@ class Network(BaseNetwork):
         elif module_name == 'guided_diffusion':
             from .guided_diffusion_modules.unet import UNet
         
+        self.dtype=torch.get_default_dtype()
         self.denoise_fn = UNet(**unet)
         self.beta_schedule = beta_schedule
 
@@ -20,7 +21,7 @@ class Network(BaseNetwork):
         self.loss_fn = loss_fn
 
     def set_new_noise_schedule(self, device=torch.device('cuda'), phase='train'):
-        to_torch = partial(torch.tensor, dtype=torch.float32, device=device)
+        to_torch = partial(torch.tensor, dtype=self.dtype, device=device)
         betas = make_beta_schedule(**self.beta_schedule[phase])
         betas = betas.detach().cpu().numpy() if isinstance(
             betas, torch.Tensor) else betas

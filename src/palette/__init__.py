@@ -22,6 +22,7 @@ def main_worker(gpu, ngpus_per_node, opt):
         )
     '''set seed and and cuDNN environment '''
     torch.backends.cudnn.enabled = True
+    torch.set_default_dtype(getattr(torch, opt['dtype']))
     warnings.warn('You have chosen to use cudnn for accleration. torch.backends.cudnn.enabled=True')
     Util.set_seed(opt['seed'])
 

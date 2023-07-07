@@ -354,7 +354,6 @@ class UNet(nn.Module):
         channel_mults=(1, 2, 4, 8),
         conv_resample=True,
         use_checkpoint=False,
-        use_fp16=False,
         num_heads=1,
         num_head_channels=-1,
         num_heads_upsample=-1,
@@ -378,7 +377,7 @@ class UNet(nn.Module):
         self.channel_mults = channel_mults
         self.conv_resample = conv_resample
         self.use_checkpoint = use_checkpoint
-        self.dtype = torch.float16 if use_fp16 else torch.float32
+        self.dtype = torch.get_default_dtype()
         self.num_heads = num_heads
         self.num_head_channels = num_head_channels
         self.num_heads_upsample = num_heads_upsample
@@ -533,7 +532,7 @@ class UNet(nn.Module):
         gammas = gammas.view(-1, )
         emb = self.cond_embed(gamma_embedding(gammas, self.inner_channel))
 
-        h = x.type(torch.float32)
+        h = x.type(self.dtype)
         for module in self.input_blocks:
             h = module(h, emb)
             hs.append(h)
