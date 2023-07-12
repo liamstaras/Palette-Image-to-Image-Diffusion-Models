@@ -109,7 +109,7 @@ class VisualWriter():
             names = results['name']
             outputs = Util.postprocess(results['result'])
             for i in range(len(names)): 
-                Image.fromarray(outputs[i]).save(os.path.join(result_path, names[i], '.tif'))
+                Image.fromarray(outputs[i]).save(os.path.join(result_path, names[i] + '.tif'))
         except:
             raise NotImplementedError('You must specify the context of name and result in save_current_results functions of model.')
 
