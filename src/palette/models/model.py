@@ -114,7 +114,7 @@ class Palette(BaseModel):
             self.iter += self.batch_size
             self.writer.set_iter(self.epoch, self.iter, phase='train')
             self.train_metrics.update(self.loss_fn.__name__, loss.item())
-            if self.iter % self.opt['train']['log_iter'] == 0:
+            if self.iter//self.opt['train']['target_log_iter'] > (self.iter-self.batch_size)//self.opt['train']['target_log_iter']:
                 for key, value in self.train_metrics.result().items():
                     self.logger.info('{:5s}: {}\t'.format(str(key), value))
                     self.writer.add_scalar(key, value)
