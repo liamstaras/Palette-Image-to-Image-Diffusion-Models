@@ -25,7 +25,7 @@ parser_test = subparsers.add_parser('test')
 parser_test.add_argument('-c', '--config', type=str, default='config/colorization_mirflickr25k.json', help='JSON file for configuration')
 parser_test.add_argument('-b', '--batch', type=int, default=None, help='Batch size in every gpu')
 parser_test.add_argument('-gpu', '--gpu_ids', type=str, default=None)
-parser_train.add_argument('-chk', '--restore_checkpoint', type=str, default=None, help='path to restore checkpoint (overrides json)')
+parser_test.add_argument('-chk', '--restore_checkpoint', type=str, default=None, help='path to restore checkpoint (overrides json)')
 parser_test.add_argument('-d', '--debug', action='store_true')
 parser_test.add_argument('-P', '--port', default='21012', type=str)
 
