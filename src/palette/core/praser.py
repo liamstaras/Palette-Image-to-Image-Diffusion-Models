@@ -108,6 +108,8 @@ def parse(args):
         opt['gpu_ids'] = [int(id) for id in args.gpu_ids.split(',')]
     if args.batch is not None:
         opt['datasets'][opt['phase']]['dataloader']['args']['batch_size'] = args.batch
+    if args.restore_checkpoint is not None:
+        opt['path']['resume_state'] = args.restore_checkpoint
 
     if opt.get('dtype') is None:
         opt['dtype'] = 'float32'
