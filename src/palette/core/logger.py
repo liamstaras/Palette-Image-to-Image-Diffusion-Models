@@ -58,6 +58,9 @@ class VisualWriter():
         enabled = opt['train']['tensorboard']
         self.rank = opt['global_rank']
 
+        self.save_types = opt['save_types']
+        if len(self.save_types) == 0: self.save_types = ['image'] # default to image save
+
         self.writer = None
         self.selected_module = ""
 
@@ -99,17 +102,20 @@ class VisualWriter():
         self.iter = iter
 
     def save_images(self, results):
-        result_path = os.path.join(self.result_dir, self.phase)
-        os.makedirs(result_path, exist_ok=True)
-        result_path = os.path.join(result_path, str(self.epoch))
-        os.makedirs(result_path, exist_ok=True)
+        result_dir = os.path.join(self.result_dir, self.phase)
+        os.makedirs(result_dir, exist_ok=True)
+        result_dir = os.path.join(result_dir, str(self.epoch))
+        os.makedirs(result_dir, exist_ok=True)
 
         ''' get names and corresponding images from results[OrderedDict] '''
         try:
             names = results['name']
-            outputs = Util.postprocess(results['result'])
-            for i in range(len(names)): 
-                Image.fromarray(outputs[i]).save(os.path.join(result_path, names[i] + '.tif'))
+            outputs = results['result']
+            for i in range(len(names)):
+                if "numpy" in self.save_types:
+                    Util.saveasnpy(outputs[i], result_dir, names[i])
+                if "image" in self.save_types:
+                    Util.saveasimage(outputs[i], result_dir, names[i])
         except:
             raise NotImplementedError('You must specify the context of name and result in save_current_results functions of model.')
 

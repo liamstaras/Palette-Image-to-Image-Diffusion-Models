@@ -1,6 +1,8 @@
 import random
 import numpy as np
 import math
+import os
+from PIL import Image
 import torch
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torchvision.utils import make_grid
@@ -33,6 +35,13 @@ def tensor2img(tensor, out_type=np.uint8, min_max=(-1, 1)):
 def postprocess(images):
 	return [tensor2img(image) for image in images]
 
+def saveasimage(tensor, result_dir, name):
+	image = tensor2img(tensor)
+	Image.fromarray(image).save(os.path.join(result_dir, name + '.tif'))
+
+def saveasnpy(tensor, result_dir, name):
+	array = tensor.cpu().detach().numpy()
+	np.save(os.path.join(result_dir, name + '.npy'), array)
 
 def set_seed(seed, gl_seed=0):
 	"""  set random seed, gl_seed used in worker_init_fn function """
