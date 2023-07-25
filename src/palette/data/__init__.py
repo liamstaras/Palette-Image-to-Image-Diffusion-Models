@@ -37,7 +37,7 @@ def define_dataloader(logger, opt):
 def define_dataset(logger, opt):
     ''' loading Dataset() class from given file's name '''
     dataset_opt = opt['datasets'][opt['phase']]['which_dataset']
-    phase_dataset = init_obj(dataset_opt, logger, default_file_name='data.dataset', init_type='Dataset')
+    phase_dataset = init_obj(dataset_opt, logger, default_file_name='palette.data.dataset', init_type='Dataset')
     val_dataset = None
 
     valid_len = 0
